@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Detection System - Thapar University</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #f4f0ff 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(to left, #5977a4, #738aad,  #939ead); /* Thapar blue */
+            color: #ffffff;
+            padding: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo-container {
+        position: absolute;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        }
+
+        .logo {
+            width: 150px; /* Adjust logo size if needed */
+        }
+
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .university-info {
+            text-align: center;
+        }
+
+        .university-info h1 {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .university-info p {
+            color: white;
+            font-size: 1.1em;
+            margin: 5px 0 0;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-info, .upload-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .project-info:hover {
+            transform: scale(1.02);
+        }
+
+        .project-info h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .project-info p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .team-section {
+            margin-top: 2rem;
+        }
+
+        .team-section h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-section ul {
+            list-style-position: inside;
+            color: #666;
+        }
+
+        .upload-container {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-container:hover {
+            border-color: #4a90e2;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 1rem auto;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #357abd;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%);
+            border-radius: 0.5rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .top-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .top-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* New styles for methodology section */
+        .methodology-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .methodology-header {
+            padding: 1.5rem;
+            background: #4a90e2;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .methodology-header:hover {
+            background: #357abd;
+        }
+
+        .methodology-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .methodology-content.active {
+            padding: 2rem;
+            max-height: 2000px;
+        }
+
+        .methodology-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Styles for GitHub section */
+        .github-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: #555;
+        }
+
+        /* Styles for metrics section */
+        .metrics-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
+            max-width: 320px; /* Limits the card width */
+            margin: 20px auto; /* Centers the card on the page */
+        }
+
+        .metric-card:hover {
+            transform: scale(1.05);
+        }
+
+        .metric-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            border-bottom: 1px solid #ddd; /* Adds a subtle divider between image and content */
+            display: block;
+            margin: 0 auto;
+        }
+
+        .metric-card-content {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-card h4 {
+            margin: 0;
+            color: #333;
+            font-weight: 1000;
+            font-size: 1.1rem;
+        }
+        @media (max-width: 600px) {
+            .metric-card {
+                max-width: 90%; /* Adjusts the width on smaller screens */
+            }
+
+            .metric-card img {
+                max-height: 200px; /* Reduces the image height for smaller screens */
+            }
+        }
+        .responsive-image {
+            max-width: 100%;    /* Image will not exceed the container's width */
+            height: auto;       /* Keeps aspect ratio */
+            object-fit: contain; /* Ensures the entire image is shown within the container */
+            display: block;
+            margin: 0 auto;
+        }
+        #recallGraph {
+        max-height: 500px; /* Adjust this value to your preference */
+        max-width: 800px;  /* Adjust this value to your preference */
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <img src="../static/college_logo.png" alt="College Logo" class="logo">
+            </div>
+            <div class="university-info">
+                <h1>THAPAR UNIVERSITY, PATIALA</h1>
+                <p>Department of Computer Science and Engineering</p>
+            </div>
+        </div>
+    </header>
+    <br>
+    <h2 style="
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background: linear-gradient(to right, #5977a4, #9da3ac);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 800px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+    Calorie Detection System
+</h2>
+
+    <main>
+        <div class="project-info" style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 12px; padding: 20px; width: 100%; max-width: 100%; margin: 20px auto; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+            <p style="color: #555; line-height: 1.6; text-align: justify; font-size: 1rem; margin-bottom: 20px;">
+                This project aims to develop a robust system that can automatically detect and extract calorie values from food labels using advanced deep learning and OCR techniques. Leveraging the power of YOLOv5 for object detection and EasyOCR for text recognition, the system efficiently identifies relevant text regions and extracts calorie information in real-time. This solution is designed to help individuals quickly and accurately determine calorie content from food packaging without manual input, aiding in dietary tracking and promoting healthier choices.            </p>
+            
+            <div class="team-section" style="text-align: center;">
+                <h3 style="color: #5a5a5a; font-size: 1.2rem; margin-bottom: 10px;">Under the Supervision of:</h3>
+                <p style="font-size: 1.1rem; font-weight: 600; color: #333;">Dr. Raman Kumar Goyal</p>
+        
+                <h3 style="color: #5a5a5a; font-size: 1.2rem; margin-top: 20px; margin-bottom: 10px;">Team Members:</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="font-size: 1rem; color: #444; margin: 5px 0;">Pranav Jain</li>
+                    <li style="font-size: 1rem; color: #444; margin: 5px 0;">Miet Pamecha</li>
+                </ul>
+        
+                <p style="margin-top: 20px; font-size: 1rem; color: #777;">Course Code: <strong>UML501 - 2425ODDSEM</strong></p>
+
+            </div>
+        </div>
+        
+
+        <div class="upload-section">
+            <h2>Upload Food Label Image</h2>
+            <p>Upload an image to detect calories</p>
+
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="upload-container" id="dropZone">
+                    <div class="upload-icon">📤</div>
+                    <p>Drop your image here or click to browse</p>
+                    <input type="file" id="fileInput" name="file" accept="image/*" style="display: none">
+                    <img id="previewImage" class="preview-image" alt="Preview">
+                </div>
+        
+                <button type="submit" class="submit-btn" disabled>
+                    <span>Detect Calories</span>
+                </button>
+            </form>
+        
+            <div class="result-section" id="resultSection">
+                <h3>Detection Results</h3>
+                <div style="background: white; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Calories:</span>
+                    <span id="calorieValue" style="font-size: 1.5rem; font-weight: bold; color: #4a90e2"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="github-section">
+            <h2>Project Repository</h2>
+            <p>Check out the complete source code and documentation on GitHub</p>
+            <a href="#" class="github-link" id="githubLink">
+                <svg height="24" width="24" viewBox="0 0 16 16" fill="white">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+                View on GitHub
+            </a>
+        </div>
+
+        <div class="methodology-section">
+            <div class="methodology-header" id="methodologyToggle">
+                <h2>Methodology</h2>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="methodology-content" id="methodologyContent">
+                <h3>1. Dataset Preparation</h3>
+                <p>
+                    The project begins with the preparation of a comprehensive dataset. Images of food packaging labels were collected from various sources, followed by annotation using tools like LabelImg. The annotated dataset was split into training and validation sets to facilitate model training and evaluation.
+                </p>
+        
+                <h3>2. Data Augmentation</h3>
+                <p>
+                    Various data augmentation techniques such as flipping, scaling, rotation, and color jittering were applied to increase the diversity of the dataset. This helps improve the model’s robustness and reduces overfitting.
+                </p>
+        
+                <h3>3. Object Detection Using YOLOv5</h3>
+                <p>
+                    YOLOv5 was employed for object detection due to its efficiency and accuracy. Transfer learning was utilized by fine-tuning a pre-trained YOLOv5 model on the custom dataset. The model was trained to detect regions containing calorie information on food labels.
+                </p>
+        
+                <h3>4. Optical Character Recognition (OCR)</h3>
+                <p>
+                    The detected region was processed using OCR techniques to extract the text. EasyOCR was the primary OCR engine used, with Tesseract as a fallback. Preprocessing techniques such as grayscale conversion, blurring, and thresholding were applied to enhance text visibility.
+                </p>
+        
+                <h3>5. Text Analysis and Calorie Value Extraction</h3>
+                <p>
+                    Extracted text was analyzed using regular expressions to identify calorie values. The regex pattern handled various formats like "Calories 200", "Energy 150 kcal", ensuring accurate extraction even with different text variations.
+                </p>
+        
+                <h3>6. Web Application Integration</h3>
+                <p>
+                    The entire pipeline was integrated into a user-friendly web application using Flask. Users can upload an image, and the system detects the calorie value and displays it on the interface. The application uses JavaScript for dynamic content updates and provides a seamless user experience.
+                </p>
+        
+                <h3>7. Performance Evaluation</h3>
+                <p>
+                    The model's performance was evaluated using metrics like precision, recall, F1-score, and Intersection over Union (IoU). Qualitative analysis was also performed to identify any failure cases and improve the system.
+                </p>
+        
+                <h3>8. Future Enhancements</h3>
+                <p>
+                    Potential improvements include refining the OCR process, optimizing the model for faster inference, and expanding the dataset to include diverse images. Cloud deployment could also be considered to enhance scalability.
+                </p>
+            </div>
+        </div>
+
+        <div class="metrics-section">
+            <h2>Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <img src="../static/precision_metrics.png" alt="Precision Graph" id="precisionGraph" class="responsive-image">
+                    <div class="metric-card-content">
+                        <h4>Precision Metrics</h4>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <img src="../static/recall_metrics.png" alt="Recall Graph" id="recallGraph" class="responsive-image">
+                    <div class="metric-card-content">
+                        <h4>Recall Metrics</h4>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <img src="../static/F1_curve.png" alt="F1 Score Graph" id="f1Graph" class="responsive-image">
+                    <div class="metric-card-content">
+                        <h4>F1 Curve</h4>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <img src="../static/PR_Curve.png" alt="Confusion Matrix" id="confusionMatrix">
+                    <div class="metric-card-content">
+                        <h4>PR Curve</h4>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <img src="../static/training.png" alt="Training Loss" id="trainingLoss">
+                    <div class="metric-card-content">
+                        <h4>Training Metrics</h4>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <img src="../static/validation.png" alt="Validation Metrics" id="validationMetrics">
+                    <div class="metric-card-content">
+                        <h4>Validation Metrics</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Thapar Institute of Engineering & Technology. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewImage = document.getElementById('previewImage');
+        const submitBtn = document.querySelector('.submit-btn');
+        const resultSection = document.getElementById('resultSection');
+        const calorieValue = document.getElementById('calorieValue');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // Handle drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#4a90e2';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#ccc';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#ccc';
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+
+        // Handle click to upload
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            handleFile(file);
+        });
+
+        function handleFile(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    submitBtn.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>Processing...';
+            
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                // Make the actual API call to your backend
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Display the result
+                resultSection.style.display = 'block';
+                calorieValue.textContent = `${data.calorie_value}`;
+                
+                // Scroll to result
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error:', error);
+                calorieValue.textContent = 'Error detecting calories. Please try again.';
+                resultSection.style.display = 'block';
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = 'Detect Calories';
+                submitBtn.disabled = false;
+            }
+        });
+        const methodologyToggle = document.getElementById('methodologyToggle');
+        const methodologyContent = document.getElementById('methodologyContent');
+        const toggleIcon = document.querySelector('.toggle-icon');
+
+        methodologyToggle.addEventListener('click', () => {
+            methodologyContent.classList.toggle('active');
+            toggleIcon.style.transform = methodologyContent.classList.contains('active') 
+                ? 'rotate(180deg)' 
+                : 'rotate(0deg)';
+        });
+
+        // Function to update GitHub link
+        function updateGithubLink(url) {
+            document.getElementById('githubLink').href = url;
+        }
+
+    </script>
+</body>
+</html>
